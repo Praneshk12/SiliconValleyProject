@@ -7,9 +7,8 @@ var END = 0;
 var gameState = PLAY;
 var score = 0;
 var chances = 3;
-var restart, restartImg;
-var powerUpsGroup = new Group();
-var aliensGroup = new Group();
+var restart, restartImg, powerUp1,powerUp2;
+var powerUpsGroup;
 
 //creates the physics engine's needed constanrs
 const Engine = Matter.Engine;
@@ -23,6 +22,9 @@ function preload() {
 	//loads the world
     BG_Img = loadImage("pac-maze.png");
     restartImg = loadImage("Restart.png");
+    powerUp1 = loadImage("swordPowerUp.png");
+    powerUp2 = loadImage("speedPowerUp.png");
+    powerUp3 = loadImage("extraLife.png");
 }
 
 function setup() {
@@ -30,6 +32,8 @@ function setup() {
     createCanvas(600, 600);
 	engine = Engine.create();
     world = engine.world;
+
+    powerUpsGroup = new Group();
 
     restart = createSprite(300,300);
     restart.addImage(restartImg);
@@ -168,7 +172,7 @@ function setup() {
     // AFTER THIS, I make all the walls invisible
     // AFTER THIS, the hero and aliens should bounce off the boundaries
     // AFTER THIS, I need to make gamestates and write the code to say if the hero is touching civilian, then the hero wins.
-    // But, the hero is oly able to get through the white square after he beats the first and second waves of aliens
+    // But, the hero is only able to get through the white square after he beats the first and second waves of aliens
     // AFTER THIS, I make the second wave of aliens(6 of them) come in with a random velocity
 }
 
@@ -183,13 +187,16 @@ function draw() {
     textSize(20);
     //display's the user's scores and lives
     text("Score:"+score, 490, 50);
-    text("Lives:"+chances, 53,345);
+    text("Lives:"+chances, 465,520);
 	
     if(gameState === PLAY){
         //calls power-ups function
         spawnPowerUps();
         //gives aliens velocity and shapecolor
 	    hero.shapeColor = "white";
+        //same concept for the powerups function
+        alien1 = createSprite(230, 240, 20, 20);
+        alien2 = createSprite(370, 240, 20, 20);
         alien1.velocityX = -3;
 	    alien1.shapeColor = "green";
 	    alien2.velocityX = 3;
@@ -199,24 +206,18 @@ function draw() {
             //adds the random power-up effect which is...
             //depending on this variable, the hero's power-ups will change
             //it can either let the hero eat aliens, more speed to hero, or add 1 more life if collided with powerUp
-            var select_PowerUp = Math.round(random(1,3));
+            var select_PowerUp = Math.round(random(1,2));
             if(select_PowerUp === 1 && hero.collide(powerUpsGroup)){
                 hero.shapeColor = "red";
                 //this power-up/function lets hero eat aliens
                 canEat();
             }
             if(select_PowerUp === 2 && hero.collide(powerUpsGroup)){
-                hero.shapeColor = "Yellow";
-               //this power-up/funcion lets hero move faster
-                addSpeed();
-            }
-            if(select_PowerUp === 3 && hero.collide(powerUpsGroup)){
-                hero.shapeColor = "pink";
                 //this powerUp adds one more life
                 extraLife();
             }
         }
-        if(aliensGroup.collide(hero)){
+        if(alien1.collide(hero)||alien2.collide(hero)){
             chances = chances - 1;
         }
         if(chances === 0 || chances < 0){
@@ -235,129 +236,6 @@ function draw() {
         }
     }
     
-    //hero.bounceOff(wall);
-    //hero.bounceOff(wall1);
-    //hero.bounceOff(wall2);
-    //hero.bounceOff(wall3);
-    //hero.bounceOff(wall4);
-    //hero.bounceOff(wall5);
-    //hero.bounceOff(wall6);
-    //hero.bounceOff(wall7);
-    //hero.bounceOff(wall8);
-    //hero.bounceOff(wall9);
-    //hero.bounceOff(wall10);
-    //hero.bounceOff(wall11);
-    //hero.bounceOff(wall12);
-    //hero.bounceOff(wall13);
-    //hero.bounceOff(wall14);
-    //hero.bounceOff(wall15);
-    //hero.bounceOff(wall16);
-    //hero.bounceOff(wall17);
-    //hero.bounceOff(wall18);
-    //hero.bounceOff(wall19);
-    //hero.bounceOff(wall20);
-    //hero.bounceOff(wall21);
-    //hero.bounceOff(wall22);
-    //hero.bounceOff(wall23);
-    //hero.bounceOff(wall24);
-    //hero.bounceOff(wall25);
-    //hero.bounceOff(wall26);
-    //hero.bounceOff(wall27);
-    //hero.bounceOff(wall28);
-    //hero.bounceOff(wall29);
-    //hero.bounceOff(wall30);
-    //hero.bounceOff(wall31);
-    //hero.bounceOff(wall32);
-    //hero.bounceOff(wall33);
-    //hero.bounceOff(wall34);
-    //hero.bounceOff(wall35);
-    //hero.bounceOff(wall36);
-    //hero.bounceOff(wall37);
-    //hero.bounceOff(wall38);
-    //hero.bounceOff(wall39);
-    //hero.bounceOff(wall40);
-    //hero.bounceOff(wall41);
-    //hero.bounceOff(wall42);
-    //hero.bounceOff(wall43);
-    //hero.bounceOff(wall44);
-    //hero.bounceOff(wall45);
-    //hero.bounceOff(wall46);
-    //hero.bounceOff(wall47);
-    //hero.bounceOff(wall48);
-    //hero.bounceOff(wall49);
-    //hero.bounceOff(wall50);
-    //hero.bounceOff(wall51);
-    //hero.bounceOff(wall52);
-    //hero.bounceOff(wall53);
-    //hero.bounceOff(wall54);
-    //hero.bounceOff(wall55);
-    //hero.bounceOff(wall56);
-    //hero.bounceOff(wall57);
-    //hero.bounceOff(wall58);
-    //hero.bounceOff(wall59);
-    //hero.bounceOff(wall60);
-    //hero.bounceOff(wall61);
-    //hero.bounceOff(wall62);
-    //hero.bounceOff(wall63);
-    //hero.bounceOff(wall64);
-    //hero.bounceOff(wall65);
-    //hero.bounceOff(wall66);
-    //hero.bounceOff(wall67);
-    //hero.bounceOff(wall68);
-    //hero.bounceOff(wall69);
-    //hero.bounceOff(wall70);
-    //hero.bounceOff(wall71);
-    //hero.bounceOff(wall72);
-    //hero.bounceOff(wall73);
-   //hero.bounceOff(wall74);
-    //hero.bounceOff(wall75);
-   // hero.bounceOff(wall76);
-   // hero.bounceOff(wall77);
-   // hero.bounceOff(wall78);
-    //hero.bounceOff(wall79);
-    //hero.bounceOff(wall80);
-    //hero.bounceOff(wall81);
-    //hero.bounceOff(wall82);
-    //hero.bounceOff(wall83);
-    //hero.bounceOff(wall84);
-    //hero.bounceOff(wall85);
-    //hero.bounceOff(wall86);
-   // hero.bounceOff(wall87);
-    //hero.bounceOff(wall88);
-    //hero.bounceOff(wall89);
-   // hero.bounceOff(wall90);
-    //hero.bounceOff(wall91);
-    //hero.bounceOff(wall92);
-    //hero.bounceOff(wall93);
-    //hero.bounceOff(wall94);
-    //hero.bounceOff(wall95);
-    //hero.bounceOff(wall96);
-    //hero.bounceOff(wall97);
-    //hero.bounceOff(wall98);
-    //hero.bounceOff(wall99);
-    //hero.bounceOff(wall100);
-    //hero.bounceOff(wall101);
-    //hero.bounceOff(wall102);
-    //hero.bounceOff(wall103);
-    //hero.bounceOff(wall104);
-    //hero.bounceOff(wall105);
-    //hero.bounceOff(wall106);
-    //hero.bounceOff(wall107);
-    //hero.bounceOff(wall108);
-    //hero.bounceOff(wall110);
-    //hero.bounceOff(wall111);
-    //hero.bounceOff(wall112);
-    //hero.bounceOff(wall113);
-    //hero.bounceOff(wall114);
-    //hero.bounceOff(wall115);
-    //hero.bounceOff(wall116);
-    //hero.bounceOff(wall117);
-    //hero.bounceOff(wall118);
-    //hero.bounceOff(wall119);
-    //hero.bounceOff(wall120);
-    //hero.bounceOff(wall121);
-    //hero.bounceOff(wall122);
-
     //displays all the walls and boundaries
 	ground.display();
     wall.display();
@@ -482,6 +360,128 @@ function draw() {
     wall121.display();
     wall122.display();
 	
+    //hero.bounceOff(wall);
+    //hero.bounceOff(wall1);
+    //hero.bounceOff(wall2);
+    //hero.bounceOff(wall3);
+    //hero.bounceOff(wall4);
+    //hero.bounceOff(wall5);
+    //hero.bounceOff(wall6);
+    //hero.bounceOff(wall7);
+    //hero.bounceOff(wall8);
+    //hero.bounceOff(wall9);
+    //hero.bounceOff(wall10);
+    //hero.bounceOff(wall11);
+    //hero.bounceOff(wall12);
+    //hero.bounceOff(wall13);
+    //hero.bounceOff(wall14);
+    //hero.bounceOff(wall15);
+    //hero.bounceOff(wall16);
+    //hero.bounceOff(wall17);
+    //hero.bounceOff(wall18);
+    //hero.bounceOff(wall19);
+    //hero.bounceOff(wall20);
+    //hero.bounceOff(wall21);
+    //hero.bounceOff(wall22);
+    //hero.bounceOff(wall23);
+    //hero.bounceOff(wall24);
+    //hero.bounceOff(wall25);
+    //hero.bounceOff(wall26);
+    //hero.bounceOff(wall27);
+    //hero.bounceOff(wall28);
+    //hero.bounceOff(wall29);
+    //hero.bounceOff(wall30);
+    //hero.bounceOff(wall31);
+    //hero.bounceOff(wall32);
+    //hero.bounceOff(wall33);
+    //hero.bounceOff(wall34);
+    //hero.bounceOff(wall35);
+    //hero.bounceOff(wall36);
+    //hero.bounceOff(wall37);
+    //hero.bounceOff(wall38);
+    //hero.bounceOff(wall39);
+    //hero.bounceOff(wall40);
+    //hero.bounceOff(wall41);
+    //hero.bounceOff(wall42);
+    //hero.bounceOff(wall43);
+    //hero.bounceOff(wall44);
+    //hero.bounceOff(wall45);
+    //hero.bounceOff(wall46);
+    //hero.bounceOff(wall47);
+    //hero.bounceOff(wall48);
+    //hero.bounceOff(wall49);
+    //hero.bounceOff(wall50);
+    //hero.bounceOff(wall51);
+    //hero.bounceOff(wall52);
+    //hero.bounceOff(wall53);
+    //hero.bounceOff(wall54);
+    //hero.bounceOff(wall55);
+    //hero.bounceOff(wall56);
+    //hero.bounceOff(wall57);
+    //hero.bounceOff(wall58);
+    //hero.bounceOff(wall59);
+    //hero.bounceOff(wall60);
+    //hero.bounceOff(wall61);
+    //hero.bounceOff(wall62);
+    //hero.bounceOff(wall63);
+    //hero.bounceOff(wall64);
+    //hero.bounceOff(wall65);
+    //hero.bounceOff(wall66);
+    //hero.bounceOff(wall67);
+    //hero.bounceOff(wall68);
+    //hero.bounceOff(wall69);
+    //hero.bounceOff(wall70);
+    //hero.bounceOff(wall71);
+    //hero.bounceOff(wall72);
+    //hero.bounceOff(wall73);
+   //hero.bounceOff(wall74);
+    //hero.bounceOff(wall75);
+   // hero.bounceOff(wall76);
+   // hero.bounceOff(wall77);
+   // hero.bounceOff(wall78);
+    //hero.bounceOff(wall79);
+    //hero.bounceOff(wall80);
+    //hero.bounceOff(wall81);
+    //hero.bounceOff(wall82);
+    //hero.bounceOff(wall83);
+    //hero.bounceOff(wall84);
+    //hero.bounceOff(wall85);
+    //hero.bounceOff(wall86);
+   // hero.bounceOff(wall87);
+    //hero.bounceOff(wall88);
+    //hero.bounceOff(wall89);
+   // hero.bounceOff(wall90);
+    //hero.bounceOff(wall91);
+    //hero.bounceOff(wall92);
+    //hero.bounceOff(wall93);
+    //hero.bounceOff(wall94);
+    //hero.bounceOff(wall95);
+    //hero.bounceOff(wall96);
+    //hero.bounceOff(wall97);
+    //hero.bounceOff(wall98);
+    //hero.bounceOff(wall99);
+    //hero.bounceOff(wall100);
+    //hero.bounceOff(wall101);
+    //hero.bounceOff(wall102);
+    //hero.bounceOff(wall103);
+    //hero.bounceOff(wall104);
+    //hero.bounceOff(wall105);
+    //hero.bounceOff(wall106);
+    //hero.bounceOff(wall107);
+    //hero.bounceOff(wall108);
+    //hero.bounceOff(wall110);
+    //hero.bounceOff(wall111);
+    //hero.bounceOff(wall112);
+    //hero.bounceOff(wall113);
+    //hero.bounceOff(wall114);
+    //hero.bounceOff(wall115);
+    //hero.bounceOff(wall116);
+    //hero.bounceOff(wall117);
+    //hero.bounceOff(wall118);
+    //hero.bounceOff(wall119);
+    //hero.bounceOff(wall120);
+    //hero.bounceOff(wall121);
+    //hero.bounceOff(wall122);
 	drawSprites();
 }
 
@@ -503,50 +503,31 @@ function keyPressed() {
         hero.velocityY = hero.velocityY - 5;
 
     }
-
-
 }
-function aliens(){
-    alien1 = createSprite(230, 240, 20, 20);
-    alien2 = createSprite(370, 240, 20, 20);
 
-    aliensGroup.add(alien1);
-    aliensGroup.add(alien2);
-}
 function spawnPowerUps(){
-    var powerUp1 = createSprite(135,63,10,10);
-    var powerUp2 = createSprite(135,495,10,10);
-    var powerUp3 = createSprite(455,70,10,10);
-    var powerUp4 = createSprite(465,495,10,10);
-
-    powerUpsGroup.add(powerUp1);
-    powerUpsGroup.add(powerUp2);
-    powerUpsGroup.add(powerUp3);
-    powerUpsGroup.add(powerUp4);
-
+    var powerUp = createSprite(140,108,10,40);
+   
+    //generate random obstacles
+    var rand = Math.round(random(1,2));
+    switch(rand) {
+      case 1: powerUp.addImage(powerUp1);
+              break;
+      case 2: powerUp.addImage(powerUp2);
+              break;
+      default: break;
+    }
+    powerUp.scale = 0.2;
+    powerUp.lifeTime = -1;
+    powerUpsGroup.add(powerUp);
 }
+
 function canEat(){
     if(hero.collide(aliensGroup)){
         aliensGroup.destroyEach();
     }
 }
-function addSpeed(){
-    if (keyCode === LEFT_ARROW) {
-		hero.velocityX = hero.velocityX - 10;	
-	}
 
-	if (keyCode === RIGHT_ARROW) {
-	hero.velocityX = hero.velocityX + 10;	
-	}
-
-	if (keyCode === DOWN_ARROW) {
-		hero.velocityY = hero.velocityY + 10;
-	}
-	if(keyCode === UP_ARROW){
-        hero.velocityY = hero.velocityY - 10;
-
-    }
-}
 function extraLife(){
     chances = chances + 1;
 }
